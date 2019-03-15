@@ -29,8 +29,8 @@ curl -XPOST \
       "video": {
         "width": 640,
         "height": 480,
-        "fps": 12,
-        "bps": 12345
+        "fps": 30,
+        "bps": 1000000
       },
       "audio": {
         "bps": 64000
