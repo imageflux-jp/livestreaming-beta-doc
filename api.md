@@ -258,7 +258,7 @@ https://live-api.imageflux.jp/
 指定したチャンネルの接続一覧を取得します。
 詳細はSoraのAPIドキュメントを参照してください。
 
-- [指定したチャネルの接続一覧を取得する](https://sora.shiguredo.jp/doc/API.html#id5)
+- [指定したチャネルの接続一覧を取得する](https://sora.shiguredo.jp/doc/API.html#id8)
 
 指定されたアクセストークンで作成された `channel_id` 以外のチャンネルの情報は取得できません。
 
@@ -267,7 +267,7 @@ https://live-api.imageflux.jp/
 指定したチャンネルのクライアント情報を取得します。
 詳細はSoraのAPIドキュメントを参照してください。
 
-- [指定したチャネルのクライアント情報を取得する](https://sora.shiguredo.jp/doc/API.html#id8)
+- [指定したチャネルのクライアント情報を取得する](https://sora.shiguredo.jp/doc/API.html#id11)
 
 指定されたアクセストークンで作成された `channel_id` 以外のチャンネルの情報は取得できません。
 
@@ -276,7 +276,7 @@ https://live-api.imageflux.jp/
 指定したチャンネル全員にプッシュ通知を送信します。
 詳細はSoraのAPIドキュメントを参照してください。
 
-- [指定したチャネル全員にプッシュ通知を送る](https://sora.shiguredo.jp/doc/API.html#id11)
+- [指定したチャネル全員にプッシュ通知を送る](https://sora.shiguredo.jp/doc/API.html#id14)
 
 指定されたアクセストークンで作成された `channel_id` 以外は指定できません。
 
@@ -285,7 +285,7 @@ https://live-api.imageflux.jp/
 指定したクライアントにプッシュ通知を送信します。
 詳細はSoraのAPIドキュメントを参照してください。
 
-- [指定したチャネルのクライアントにプッシュ通知を送る](https://sora.shiguredo.jp/doc/API.html#id12)
+- [指定したチャネルのクライアントにプッシュ通知を送る](https://sora.shiguredo.jp/doc/API.html#id15)
 
 指定されたアクセストークンで作成された `channel_id` 以外は指定できません。
 
@@ -294,7 +294,7 @@ https://live-api.imageflux.jp/
 指定したチャンネルの配信者にプッシュ通知を送信します。
 詳細はSoraのAPIドキュメントを参照してください。
 
-- [指定したチャネルの配信者にプッシュ通知を送る](https://sora.shiguredo.jp/doc/API.html#id13)
+- [指定したチャネルの配信クライアントにプッシュ通知を送る](https://sora.shiguredo.jp/doc/API.html#id17)
 
 指定されたアクセストークンで作成された `channel_id` 以外は指定できません。
 
@@ -303,7 +303,7 @@ https://live-api.imageflux.jp/
 指定したチャンネルの視聴者にプッシュ通知を送信します。
 詳細はSoraのAPIドキュメントを参照してください。
 
-- [指定したチャネルの視聴者にプッシュ通知を送る](https://sora.shiguredo.jp/doc/API.html#id14)
+- [指定したチャネルの視聴クライアントにプッシュ通知を送る](https://sora.shiguredo.jp/doc/API.html#id18)
 
 指定されたアクセストークンで作成された `channel_id` 以外は指定できません。
 
@@ -312,7 +312,7 @@ https://live-api.imageflux.jp/
 指定したクライアントの統計情報を取得します。
 詳細はSoraのAPIドキュメントを参照してください。
 
-- [指定したクライアントの統計情報を取得する](https://sora.shiguredo.jp/doc/API.html#id26)
+- [指定したクライアントの統計情報を取得する](https://sora.shiguredo.jp/doc/API.html#id32)
 
 指定されたアクセストークンで作成された `channel_id` 以外は指定できません。
 
