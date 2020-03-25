@@ -50,7 +50,8 @@ https://live-api.imageflux.jp/
 
 ## ImageFlux_20180905.CreateChannel
 
-クライアントが接続する新規チャンネルを作成します。
+クライアントが接続するシングルストリームのチャンネルを作成します。
+HLS変換を行います。
 
 ### Request
 
@@ -149,10 +150,151 @@ https://live-api.imageflux.jp/
 - playlist_url
   - HLSプレイリストファイルのURL
 
+## ImageFlux_20200316.CreateMultistreamChannel
+
+クライアントが接続するマルチストリームのチャンネルを作成します。
+HLS変換は行いません。
+
+### Request
+
+```json
+{
+  "auth_webhook_url": "https://example.com/api/auth_webhook_url",
+  "event_webhook_url": "https://example.com/api/event_webhook_url"
+}
+```
+
+- `auth_webhook_url`
+  - 認証ウェブフックを送信するURLを指定します。
+  - 認証ウェブフックの仕様はSoraのドキュメントを参照してください:
+    - [認証ウェブフック](https://sora.shiguredo.jp/doc/AUTH_WEBHOOK.html)
+  - 空文字列を指定した場合、すべての接続が許可されるようになります。
+- `event_webhook_url`
+  - イベントウェブフックを送信するURLを指定します。
+  - 空文字列を指定した場合、イベントウェブフックは送信されません。
+  - イベントフックの仕様はSoraのドキュメントを参照してください:
+    - [イベントウェブフック](https://sora.shiguredo.jp/doc/EVENT_WEBHOOK.html)
+
+
+### Response
+
+```json
+{
+    "channel_id": "<channel_id>",
+    "sora_url": "ws://example.com:5000/signaling",
+}
+```
+
+- channel_id
+  - 作成されたチャンネルの `channel_id`
+- sora_url
+  - 配信者が接続するSoraサーバのURL
+
+## ImageFlux_20200316.CreateMultistreamChannelWithHLS
+
+クライアントが接続するマルチストリームのチャンネルを作成します。
+HLS変換を行います。
+
+### Request
+
+```json
+{
+  "hls": [
+    {
+      "durationSeconds": 1,
+      "startTimeOffset": -2,
+      "video": {
+        "width": 640,
+        "height": 480,
+        "fps": 12,
+        "bps": 2465792
+      },
+      "audio": {
+        "bps": 64000
+      },
+      "archive": {
+        "archive_destination_id": "<archive_destination_id>"
+      }
+    }
+  ],
+  "auth_webhook_url": "https://example.com/api/auth_webhook_url",
+  "event_webhook_url": "https://example.com/api/event_webhook_url"
+}
+```
+
+Request は`ImageFlux_20180905.CreateChannel`のものと同じです。
+
+
+### Response
+
+```json
+{
+    "channel_id": "<channel_id>",
+    "sora_url": "ws://example.com:5000/signaling",
+}
+```
+
+- channel_id
+  - 作成されたチャンネルの `channel_id`
+- sora_url
+  - 配信者が接続するSoraサーバのURL
+
+### HLSのプレイリストURLを取得する方法
+
+マルチストリームのチャンネルのHLS変換ではHLSのプレイリストURLは配信開始後に決まります。
+それを取得するのに2つの方法があります。
+
+#### イベントウェブフックによる通知
+
+チャンネルの作成時にイベントウェブフックを登録してください。
+HLSのプレイリストURLが利用可能になったときに`"type": "notify.playlist_url"` のイベントにて通知されます。
+
+#### APIによる取得
+
+配信開始した後に数秒待ってから`ImageFlux_20200207.ListPlaylistURLs` を使用してHLSのプレイリストURLの一覧を取得してください。
+
+## ImageFlux_20200207.ListPlaylistURLs
+
+指定したチャンネルにあるHLSのプレイリストURLの一覧を取得します。
+
+### Request
+
+```json
+{
+    "channel_id": "<channel_id>"
+}
+```
+
+- channel_id
+  - チャンネルの `channel_id`
+
+### Response
+
+```
+{
+    "channel_id": "<channel_id>",
+    "hls": [
+        {
+            "connection_id": "<connection_id>",
+            "playlist_url": "https://example.com/hls/XXXX/XXXXXXXX.m3u8"
+	},...
+    ]
+}
+```
+
+- channel_id
+  - チャンネルの `channel_id`
+- connection_id
+  - 配信の `connection_id`
+- playlist_url
+  - HLSプレイリストファイルのURL
+  
+
 ## ImageFlux_20180501.DeleteChannel
 
 指定したチャンネルを削除します。
 チャンネルに接続しているクライアントは強制的に切断され、HLSの生成も終了します。
+以降はこのチャンネルを使用しての接続はできません。
 
 ### Request
 
