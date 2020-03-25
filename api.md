@@ -120,9 +120,9 @@ https://live-api.imageflux.jp/
 |    32 kbps | 32000   |
 |    40 kbps | 40000   |
 |    48 kbps | 48000   |
+|    56 kbps | 56000   |
 |    64 kbps | 64000   |
 |    80 kbps | 80000   |
-|    56 kbps | 56000   |
 | (デフォルト) 96 kbps | 96000   |
 |   112 kbps | 112000  |
 |   128 kbps | 128000  |
