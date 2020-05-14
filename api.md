@@ -1,10 +1,8 @@
 # API
 
-βリリースの間、全てのAPI仕様は変更されることがあります。
-
 ## 概要
 
-ImageFlux Live StreamingのAPIは最新の[Sora SFU API](https://sora.shiguredo.jp/doc/API.html)と互換性を保っています。
+ImageFlux Live StreamingのAPIは最新の[Sora SFU API](https://sora-doc.shiguredo.jp/api)と互換性を保っています。
 対応するSora SFUのバージョンは更新履歴をご確認ください。
 
 APIの仕様は次の通りです。
@@ -80,16 +78,16 @@ HLS変換を行います。
 }
 ```
 
-- `hls`
+- `hls` HLS変換のときのトランスコードの設定です。マルチビットレートにするには配列で複数個指定します。
   - `durationSeconds`
     - HLS配信でのセグメント時間を指定します。短く設定するほど遅延を減らすことができますが、配信あたりの転送量が増加します。
   - `startTimeOffset`
     - HLS配信での`EXT-X-START:TIME-OFFSET`パラメータを指定します。
   - `video`
     - `width`
-      - 出力する幅を指定します。
+      - 出力する幅を指定します。最小値は36です。最大値は4096です。
     - `height`
-      - 出力する高さを指定します。
+      - 出力する高さを指定します。最小値は36です。最大値は4096です。
     - `fps`
       - 秒間フレーム数(frames per second)を指定します。
     - `bps`
@@ -100,16 +98,18 @@ HLS変換を行います。
   - `archive`
     - `archive_destination_id`
       - アーカイブ保存先のIDを指定します。
+      - このIDは[ImageFlux_20190205.CreateArchiveDestination](./api.md#imageflux_20190205createarchivedestination)で作成します。
+      - 空文字列を指定した場合、アーカイブ保存は行われません。
 - `auth_webhook_url`
   - 認証ウェブフックを送信するURLを指定します。
   - 認証ウェブフックの仕様はSoraのドキュメントを参照してください:
-    - [認証ウェブフック](https://sora.shiguredo.jp/doc/AUTH_WEBHOOK.html)
+    - [認証ウェブフック](https://sora-doc.shiguredo.jp/auth_webhook)
   - 空文字列を指定した場合、すべての接続が許可されるようになります。
 - `event_webhook_url`
   - イベントウェブフックを送信するURLを指定します。
   - 空文字列を指定した場合、イベントウェブフックは送信されません。
   - イベントフックの仕様はSoraのドキュメントを参照してください:
-    - [イベントウェブフック](https://sora.shiguredo.jp/doc/EVENT_WEBHOOK.html)
+    - [イベントウェブフック](https://sora-doc.shiguredo.jp/event_webhook)
 
 #### 利用可能な音声ビットレート
 
@@ -167,13 +167,13 @@ HLS変換は行いません。
 - `auth_webhook_url`
   - 認証ウェブフックを送信するURLを指定します。
   - 認証ウェブフックの仕様はSoraのドキュメントを参照してください:
-    - [認証ウェブフック](https://sora.shiguredo.jp/doc/AUTH_WEBHOOK.html)
+    - [認証ウェブフック](https://sora-doc.shiguredo.jp/auth_webhook)
   - 空文字列を指定した場合、すべての接続が許可されるようになります。
 - `event_webhook_url`
   - イベントウェブフックを送信するURLを指定します。
   - 空文字列を指定した場合、イベントウェブフックは送信されません。
   - イベントフックの仕様はSoraのドキュメントを参照してください:
-    - [イベントウェブフック](https://sora.shiguredo.jp/doc/EVENT_WEBHOOK.html)
+    - [イベントウェブフック](https://sora-doc.shiguredo.jp/event_webhook)
 
 
 ### Response
@@ -247,7 +247,18 @@ Request は`ImageFlux_20180905.CreateChannel`のものと同じです。
 #### イベントウェブフックによる通知
 
 チャンネルの作成時にイベントウェブフックを登録してください。
-HLSのプレイリストURLが利用可能になったときに`"type": "notify.playlist_url"` のイベントにて通知されます。
+HLSのプレイリストURLが利用可能になったときに`"type": "notify.playlist_url"` のイベントにて通知されます。その際、イベントの内容は以下のようになります。
+
+```json
+{
+  "channel_id": "<channel_id>",
+  "connection_id": "<connection_id>",
+  "timestamp": "2020-01-02T12:34:56.12345Z",
+  "type": "notify.playlist_url",
+  "playlist_url": "https://example.com/hls/XXXX/XXXXXXXX.m3u8"
+}
+
+```
 
 #### APIによる取得
 
@@ -309,15 +320,13 @@ HLSのプレイリストURLが利用可能になったときに`"type": "notify.
 
 ## ImageFlux_20180601.Stats
 
-課金に使用する統計情報を取得します。
+課金に使用される統計情報を取得します。
 
 **このAPIは未実装です。**
 
 ## ImageFlux_20190205.CreateArchiveDestination
 
 アーカイブ保存先を新たに作成します。
-
-**このAPIは実験的機能です。今後変更される可能性があります。**
 
 ### Request
 
@@ -336,13 +345,13 @@ HLSのプレイリストURLが利用可能になったときに`"type": "notify.
   - Amazon S3を指定する場合、 `s3://` スキームを用いて `s3://<my-bucket-name>/<path>/` のように入力します。
   - Google Cloud Storageを指定する場合、 `gs://` スキームを用いて `gs://<my-bucket-name>/<path>` のように入力します。
 - aws_region
-  - Amazon Web Servicesのリージョン名を指定します。
+  - Amazon Web Servicesのリージョン名を指定します。S3以外のときは不要です。
 - aws_access_key_id
-  - AWSのアクセスキーIDを指定します
+  - AWSのアクセスキーIDを指定します。S3以外のときは不要です。
 - aws_secret_access_key
-  - AWSのシークレットアクセスキーを指定します
+  - AWSのシークレットアクセスキーを指定します。S3以外のときは不要です。
 - gcp_credential_json
-  - GCPのクレデンシャルJSONを文字列で指定します。オブジェクトではなく、文字列として指定する必要があります。
+  - GCP(Google Cloud Platform)のクレデンシャルJSONを文字列で指定します。オブジェクトではなく、文字列として指定する必要があります。Google Cloud Storage以外のときは不要です。
 
 ### Response
 
@@ -358,8 +367,6 @@ HLSのプレイリストURLが利用可能になったときに`"type": "notify.
 ## ImageFlux_20190205.DeleteArchiveDestination
 
 作成されているアーカイブ保存先を削除します。
-
-**このAPIは実験的機能です。今後変更される可能性があります。**
 
 ### Request
 
@@ -395,66 +402,29 @@ HLSのプレイリストURLが利用可能になったときに`"type": "notify.
 }
 ```
 
-## Sora_20151104.ListConnections
+## SoraのAPI
 
-指定したチャンネルの接続一覧を取得します。
-詳細はSoraのAPIドキュメントを参照してください。
+以下のSoraのAPIを利用することができます。
+詳細は[SoraのAPIドキュメント](https://sora-doc.shiguredo.jp/api)を参照してください。
 
-- [指定したチャネルの接続一覧を取得する](https://sora.shiguredo.jp/doc/API.html#id8)
+- Sora_20151104.DisconnectChannel
+- Sora_20151104.DisconnectConnection
+- Sora_20151104.Disconnect
+- Sora_20151104.ListConnections
+- Sora_20170814.ListChannelClients
+- Sora_20160711.PushChannel
+- Sora_20160711.PushClient
+- Sora_20160711.PushConnection
+- Sora_20160711.PushUpstream
+- Sora_20160711.PushDownStream
+- Sora_20170529.GetStats
+- Sora_20170529.GetStatsConnection
+- Sora_20190327.ChangeUpstreamVideoBitRate
+- Sora_20180404.CastSpotlight
+- Sora_20180404.CastAlwaysSpotlight
+- Sora_20180404.CancelSpotlight
+- Sora_20181023.DowngradeSpotlightBitRate
+- Sora_20181023.ResetSpotlightBitRate
+- Sora_20180820.ChangeSimulcastQuality
 
-指定されたアクセストークンで作成された `channel_id` 以外のチャンネルの情報は取得できません。
-
-## Sora_20170814.ListChannelClients
-
-指定したチャンネルのクライアント情報を取得します。
-詳細はSoraのAPIドキュメントを参照してください。
-
-- [指定したチャネルのクライアント情報を取得する](https://sora.shiguredo.jp/doc/API.html#id11)
-
-指定されたアクセストークンで作成された `channel_id` 以外のチャンネルの情報は取得できません。
-
-## Sora_20160711.PushChannel
-
-指定したチャンネル全員にプッシュ通知を送信します。
-詳細はSoraのAPIドキュメントを参照してください。
-
-- [指定したチャネル全員にプッシュ通知を送る](https://sora.shiguredo.jp/doc/API.html#id14)
-
-指定されたアクセストークンで作成された `channel_id` 以外は指定できません。
-
-## Sora_20160711.PushClient
-
-指定したクライアントにプッシュ通知を送信します。
-詳細はSoraのAPIドキュメントを参照してください。
-
-- [指定したチャネルのクライアントにプッシュ通知を送る](https://sora.shiguredo.jp/doc/API.html#id15)
-
-指定されたアクセストークンで作成された `channel_id` 以外は指定できません。
-
-## Sora_20160711.PushUpstream
-
-指定したチャンネルの配信者にプッシュ通知を送信します。
-詳細はSoraのAPIドキュメントを参照してください。
-
-- [指定したチャネルの配信クライアントにプッシュ通知を送る](https://sora.shiguredo.jp/doc/API.html#id17)
-
-指定されたアクセストークンで作成された `channel_id` 以外は指定できません。
-
-## Sora_20160711.PushDownStream
-
-指定したチャンネルの視聴者にプッシュ通知を送信します。
-詳細はSoraのAPIドキュメントを参照してください。
-
-- [指定したチャネルの視聴クライアントにプッシュ通知を送る](https://sora.shiguredo.jp/doc/API.html#id18)
-
-指定されたアクセストークンで作成された `channel_id` 以外は指定できません。
-
-## Sora_20170529.GetStats
-
-指定したクライアントの統計情報を取得します。
-詳細はSoraのAPIドキュメントを参照してください。
-
-- [指定したクライアントの統計情報を取得する](https://sora.shiguredo.jp/doc/API.html#id32)
-
-指定されたアクセストークンで作成された `channel_id` 以外は指定できません。
-
+自分のアクセストークンで作成された `channel_id` 以外は指定できません。

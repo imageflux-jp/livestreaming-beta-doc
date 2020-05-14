@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<meta charset="utf-8">
+        <title>WebRTC Receive</title>
+    </head>
+    <body>
+        <h1>WebRTC Receive</h1>
+	<video id="remote-video" autoplay controls muted></video>
+	<script type="text/javascript" src="./sora.min.js"></script>
+	<script type="text/javascript">
+	 const channel_id = 'xxxxyyyy';
+	 const sora_url = 'wss://xxxyyy.imageflux.jp/signaling';
+	 const metadata = {};
+	 
+	 const debug = true;
+	 const sora = Sora.connection(sora_url, debug);
+	 let options = {
+             audio: true,
+             video: true,
+	 }
+	 const subscriber = sora.recvonly(channel_id, metadata, options);
+
+	 subscriber.connect()
+		   .then(stream => {
+                       document.querySelector('#remote-video').srcObject = stream;
+		   })
+		   .catch(e => {
+                       console.error(e);
+		   });
+	</script>
+   </body>
+</html>

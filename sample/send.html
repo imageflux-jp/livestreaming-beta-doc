@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<meta charset="utf-8">
+        <title>WebRTC Send</title>
+    </head>
+    <body>
+        <h1>WebRTC Send</h1>
+	<video id="local-video" autoplay controls muted></video>
+	<script type="text/javascript" src="./sora.min.js"></script>
+	<script type="text/javascript">
+	 const channel_id = 'xxxxyyyy';
+	 const sora_url = 'wss://xxxyyy.imageflux.jp/signaling';
+	 const metadata = {};
+	 
+	 const debug = true;
+	 const sora = Sora.connection(sora_url, debug);
+	 let options = {
+             audio: true,
+             audioCodecType: 'OPUS',
+             audioBitRate: 96,
+             video: true,
+             videoCodecType: 'H264',
+             videoBitRate: 2000,
+         }
+	 const publisher = sora.sendonly(channel_id, metadata, options);
+	 let constraints = {
+             audio: true,
+             video: {
+                 width: 1280,
+                 height: 720,
+                 frameRate: 30,
+             }
+         }
+	 navigator.mediaDevices.getUserMedia(constraints)
+		  .then(stream => publisher.connect(stream))
+		  .then(stream => {
+		      document.querySelector('#local-video').srcObject = stream;
+		  })
+		  .catch(e => { console.error(e); })
+	</script>
+    </body>
+</html>
