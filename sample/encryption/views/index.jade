@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  if (!user)
+    p not yet logged in
+    a(href="login") Login
+    
+  if (user)
+    p hello #{user}
+    a(href="logout") Logout
+
+  br
+  br
+  br
+  script(src='https://cdn.jsdelivr.net/npm/hls.js@latest')
+  script(src='channel.js')
+
+  div#demo.
+    <video id="video" muted controls playsinline autoplay style="width:320px;border:solid 1px black;"></video>
+    <script>
+      var video = document.getElementById('video');
+      var videoSrc = window.channelInfo.playlist_url;
+      if (Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource(videoSrc);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+          video.play();
+        });
+      }
+      else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = videoSrc;
+        video.addEventListener('loadedmetadata', function() {
+          video.play();
+        });
+      }
+    </script>

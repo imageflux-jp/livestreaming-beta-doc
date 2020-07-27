@@ -73,6 +73,7 @@ HLS変換を行います。
       }
     }
   ],
+  "encrypt_key_uri": "https://example.com/api/encrypt_key_uri",
   "auth_webhook_url": "https://example.com/api/auth_webhook_url",
   "event_webhook_url": "https://example.com/api/event_webhook_url"
 }
@@ -100,6 +101,11 @@ HLS変換を行います。
       - アーカイブ保存先のIDを指定します。
       - このIDは[ImageFlux_20190205.CreateArchiveDestination](./api.md#imageflux_20190205createarchivedestination)で作成します。
       - 空文字列を指定した場合、アーカイブ保存は行われません。
+- `encrypt_key_uri`
+  - 会員認証APIのURLを指定します。httpsスキームのみです。
+  - 未指定または空文字列を指定した場合、暗号化処理はされません。
+  - auth_webhook_url, event_webhook_urlと少し似ていますが、encrypt_key_uriの末尾はURI(ユー・アール・アイ)です。
+  - 会員限定配信および会員認証APIの詳細は[こちらのページ](encryption.md)を参照してください
 - `auth_webhook_url`
   - 認証ウェブフックを送信するURLを指定します。
   - 認証ウェブフックの仕様はSoraのドキュメントを参照してください:
@@ -217,6 +223,7 @@ HLS変換を行います。
       }
     }
   ],
+  "encrypt_key_uri": "https://example.com/api/encrypt_key_uri",
   "auth_webhook_url": "https://example.com/api/auth_webhook_url",
   "event_webhook_url": "https://example.com/api/event_webhook_url"
 }

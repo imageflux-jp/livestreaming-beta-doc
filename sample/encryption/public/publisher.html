@@ -1,0 +1,82 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="https://cdn.jsdelivr.net/npm/sora-js-sdk@2020.1.3/dist/sora.min.js"></script>
+<script src="channel.js"></script>
+<script>
+async function CreatePublisher(){
+	var debug = true;
+	var metadata = '';
+	var options = {
+        audio: true, audioCodecType:"OPUS", audioBitRate: 96,
+		video: true, videoCodecType:"H264", videoBitRate: 1000
+    };
+    console.error("window.channelInfo.sora_url", window.channelInfo.sora_url);
+    console.error("window.channelInfo.channel_id", window.channelInfo.channel_id);
+	window.sora = Sora.connection(window.channelInfo.sora_url, debug);
+	window.publisher = window.sora.sendonly(window.channelInfo.channel_id, metadata, options);
+
+	window.publisher.on('disconnect', function(event) {
+		console.log("disconnect");
+		console.log(event);
+	});
+	window.publisher.on('push', function(event) {
+		console.log("push");
+		console.log(event);
+	});
+	window.publisher.on('addstream', function(event) {
+		console.log(event);
+	});
+	window.publisher.on('removestream', function(event) {
+		console.log(event);
+	});
+	window.publisher.on('notify', function(event) {
+		console.log("notify");
+		console.log(event);
+	});
+//	window.publisher.on('log', function(event) {
+//		console.log("log");
+//		console.log(event);
+//	});
+	return window.publisher;
+}
+
+async function DeletePublisher(){
+	if(window.publisher){
+		try{
+			await window.publisher.disconnect();
+		}finally{
+			delete window.publisher;
+			delete window.sora;
+		}
+		return;
+	}
+	throw Error("no publishder");
+}
+
+async function start(){
+	document.querySelector('#error-message').textContent = '';
+	document.querySelector('#startBox').style.display = "none";
+	document.querySelector('#controlBox').style.display = "block";
+
+	await CreatePublisher();
+	const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
+	document.querySelector('#local-video').srcObject = stream;
+	await window.publisher.connect(stream);
+}
+
+async function stop(){
+	document.querySelector('#startBox').style.display = "block";
+	document.querySelector('#controlBox').style.display = "none";
+	await DeletePublisher();
+}
+
+</script>
+<div id="startBox" style="display: block">
+	<button id="start" onclick="start()">start</button>
+</div>
+<div id="controlBox" style="display: none">
+	<button id="stop" onclick="stop()">stop</button>
+</div>
+<video id="local-video" autoplay playsinline controls muted style="width: 400px; height: 300px; border: 1px solid black;"></video>
+<p id="error-message" style="color:red; font-weight: bold;"></p>
+

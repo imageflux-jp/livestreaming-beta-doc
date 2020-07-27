@@ -8,6 +8,7 @@ ImageFlux Live Streaming はライブの動画配信を行うためのプラッ�
 - [クイックスタート](./quickstart.md)
 - [APIドキュメント](./api.md)
 - [アーカイブの保存](./archive.md)
+- [会員限定配信](./encryption.md)
 
 ## APIエンドポイント
 ```
@@ -19,6 +20,7 @@ https://live-api.imageflux.jp/
 - 2019/03/15 初版公開
 - 2020/03/25 マルチストリーム対応のAPIを追加しました。
 - 2020/04/16 Sora APIの項目を追加しました。
+- 2020/07/27 HLS暗号化の機能を追加しました。その使い方の説明として[会員限定配信](./encryption.md)のページを追加しました。
 
 
 # Copyright
