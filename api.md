@@ -325,6 +325,31 @@ HLSのプレイリストURLが利用可能になったときに`"type": "notify.
 - channel_id
   - 削除するチャンネルの `channel_id`
 
+## ImageFlux_20200729.ListChannelIDs
+
+作成済みのチャンネルの`channel_id`の一覧を取得します。
+不要になったchannelは[DeleteChannel](./api.md#imageflux_20180501deletechannel) APIで削除してください。
+
+### Request
+
+```json
+{}
+```
+
+### Response
+
+```
+{
+    "channel_ids": [
+        "<channel_id>"
+	...
+    ]
+}
+```
+
+- channel_ids
+  - 作成済みのチャンネルの`channel_id`の配列
+
 ## ImageFlux_20180601.Stats
 
 課金に使用される統計情報を取得します。
