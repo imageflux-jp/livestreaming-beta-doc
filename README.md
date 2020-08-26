@@ -22,7 +22,7 @@ https://live-api.imageflux.jp/
 - 2020/04/16 Sora APIの項目を追加しました。
 - 2020/07/27 HLS暗号化の機能を追加しました。その使い方の説明として[会員限定配信](./encryption.md)のページを追加しました。
 - 2020/08/05 [作成済みのチャンネルのchannel_idの一覧を取得するAPI](./api.md#imageflux_20200729listchannelids)を追加しました。
-
+- 2020/08/25 [チャンネル作成のAPI](./api.md#imageflux_20180905createchannel)に映像コーデックの指定を追加しました。
 
 # Copyright
 
