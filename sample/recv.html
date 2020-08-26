@@ -17,7 +17,9 @@
 	 const sora = Sora.connection(sora_url, debug);
 	 let options = {
              audio: true,
+             audioCodecType: 'OPUS',
              video: true,
+             videoCodecType: 'H264',
 	 }
 	 const subscriber = sora.recvonly(channel_id, metadata, options);
 
