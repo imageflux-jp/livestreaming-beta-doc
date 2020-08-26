@@ -143,11 +143,11 @@ HLS変換を行います。
 
 #### 利用可能な映像コーデック
 
-H264のHighプロファイル、Mainプロファイル、Baselineプロファイルを指定できます。デフォルトはHighプロファイルです。
-有効な値は以下の通りです。
-"h264_high": H264のHighプロファイル
-"h264_main": H264のMainプロファイル
-"h264_baseline": H264のBaselineプロファイル
+H264のHighプロファイル、Mainプロファイル、Baselineプロファイルを指定できます。デフォルトはHighプロファイルです。<br>
+有効な値は以下の通りです。<br>
+- "h264_high": H264のHighプロファイル
+- "h264_main": H264のMainプロファイル
+- "h264_baseline": H264のBaselineプロファイル
 
 ### Response
 
